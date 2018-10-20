@@ -35,6 +35,9 @@ var HANDLES HandleSync
 func (hs *HandleSync) Insert(h pb.Handle) (err error) {
 	hs.Lock()
 	// TODO-WORKSHOP: This code should insert the handle into the HandleMap
+
+	hs.HandleMap[h.Name] = Handle{Handle: h, Created_at: time.Now()}
+
 	hs.Unlock()
 	return nil
 }
@@ -43,9 +46,10 @@ func (hs *HandleSync) Insert(h pb.Handle) (err error) {
 func (hs *HandleSync) Get(name string) (h pb.Handle, ok bool) {
 	hs.Lock()
 	// TODO-WORKSHOP: This code should fetch the handle from the HandleMap based on the key name
+	 handle, ok := hs.HandleMap[name]
+	 h = handle.Handle
 	// TODO-THINK: Why is this in a Lock() method?
 	hs.Unlock()
-
 	return
 }
 
@@ -53,6 +57,7 @@ func (hs *HandleSync) Get(name string) (h pb.Handle, ok bool) {
 func (hs *HandleSync) Delete(name string) {
 	hs.Lock()
 	// TODO-WORKSHOP: This code should remove the handle from the HandleMap based on the key name
+	delete (hs.HandleMap, name)
 	hs.Unlock()
 	fmt.Println("Handle Removed for ", name)
 }
@@ -63,6 +68,9 @@ func (h Handle) String() string {
 
 func (hs HandleSync) String() (users string) {
 	// TODO-WORKSHOP: This code should print the list of all names of the handles in the map
+	for name, _:= range hs.HandleMap{
+		users = fmt.Sprintf("%s %s\n", users, name)
+	}
 	// TODO-THINK: Do we need a Lock here?
 
 	return

@@ -68,7 +68,8 @@ func sendChat(h pb.Handle, message string) {
 
 	var req pb.ChatRequest
 	// TODO-WORKSHOP: Create req struct of type pb.ChatRequest to send to client.Chat method
-
+  req = pb.ChatRequest{From: &ME, To: &h, Message: message}
+  time.Sleep(5)
 	_, err = client.Chat(ctx, &req)
 	if err != nil {
 		log.Printf("ERROR: Chat(): %v", err)
